@@ -1,0 +1,275 @@
+---
+title: "Git 계정 폴더 단위로 다르게 사용하기"
+thumbnail: "./git.png"
+thumbnail_alt: "git"
+summary: "여러 개의 SSH 키로 gitconfig 설정하기"
+date: "2022-07-27"
+keywords:
+  - Git
+---
+
+import { Image } from "../../../src/components/Common/Image";
+import { Link } from "../../../src/components/Common/Link";
+import { Source } from "../../../src/components/Common/Source";
+import { Highlight } from "../../../src/components/Common/Highlight";
+import { CodeBlock } from "../../../src/components/Common/CodeBlock";
+import { Blockquote } from "../../../src/components/Common/Blockquote";
+import { TextHighlight } from "../../../src/components/Common/TextHighlight";
+
+import gitMultiAuth1 from "./image/git-multi-auth-1.png";
+import gitMultiAuth2 from "./image/git-multi-auth-2.png";
+import gitMultiAuth3 from "./image/git-multi-auth-3.png";
+import gitMultiAuth4 from "./image/git-multi-auth-4.png";
+import gitMultiAuth5 from "./image/git-multi-auth-5.png";
+import gitMultiAuth6 from "./image/git-multi-auth-6.png";
+import gitMultiAuth7 from "./image/git-multi-auth-7.png";
+
+<Blockquote>
+  노트북 하나로 개인용, 회사용 git 계정 2개를 사용하려고 검색해보니
+  <Link
+    link="https://git-scm.com/docs/git-config#_conditional_includes"
+    target="_blank">
+    git-config의 cinditional includes
+  </Link>
+  라는 것이 있어 적용해보기로 했다.
+</Blockquote>
+
+## 1. SSH 공개키 생성하기
+
+### 1.1 사전 작업
+
+- SSH 공개키를 왜 만들어야 할까?
+  - 많은 Git 서버들은 SSH 공개키로 인증하기 때문에 생성해야 한다.
+- 사용자의 SSH 키들은 기본적으로 ~/.ssh 디렉토리에 저장된다.
+  - 터미널에서 <Highlight>cd ~/.ssh</Highlight> 명령어를 치고 ~/.ssh 디렉토리로 넘어가보자
+- 그 후, <Highlight>ls</Highlight> 명령어를 치면 생성된 SSH 공개키들을 확인할 수 있다.
+
+<CodeBlock>
+  $ cd ~/.ssh <br />
+  $ ls <br />
+  authorized_keys2 id_dsa known_hosts config id_dsa.pub
+</CodeBlock>
+
+- id_dsa나 id_rsa 파일이 존재할 것이다. 뒤에 확장자가 <Highlight>.pub</Highlight>인 것은 공개키를 의미하고 나머지는 개인키를 의미한다.
+
+<br />
+<br />
+
+### 1.2 작업
+
+- 이제 개인과 회사용 SSH 키를 2개 생성해보자. SSH 공개키 를 생성하는 명령어는 다음과 같다.
+- <Highlight>ssh-keygen -t rsa -b 4096 -C "이메일"</Highlight>
+
+<CodeBlock>$ ssh-keygen -t rsa -b 4096 -C "example@example.com"</CodeBlock>
+
+- 위 명령어를 입력하면 다음과 같이 파일 경로와 파일 이름을 설정하라고 뜬다.
+
+  <Image src={gitMultiAuth1} />
+
+- 파일 경로는 .ssh에 저장하면 되고 파일 이름만 사용하고 싶은대로 바꿔주면 된다.
+
+  <Image src={gitMultiAuth2} />
+
+- 파일 이름을 입력하고 Enter 키를 누르면 다음과 같이 비밀번호를 설정하라고 뜬다.
+- 비밀번호를 설정해도 되지만 설정하지 않아도 된다. (후에 비밀번호를 재설정할 수 있다.)
+
+  <Image src={gitMultiAuth3} />
+
+- Enter 키를 두 번 누르게 되면 파일이 생성된다.
+- SSH 키를 keygen으로 2개를 생성하면 총 4개의 파일이 추가로 생성된다.
+
+<CodeBlock>
+  $ ls
+  <br />
+  authorized_keys2 id_dsa known_hosts config
+  <TextHighlight color="#7D9D9C" paddingX={24}>/* 기존 */</TextHighlight>
+  <br />
+  id_rsa_campany.pub id_rsa_personal.pub id_rsa_campany id_rsa_personal
+  <TextHighlight color="#7D9D9C" paddingX={24}>/* 추가 */</TextHighlight>
+  <br />
+</CodeBlock>
+
+<br />
+<br />
+<br />
+
+## 2. SSH Agent에 등록하기
+
+### 2.1 사전 작업
+
+- ssh-agent 없이도 SSH 키를 가지고 아이디, 비밀번호 없이 git 원격 서버에 접속할 수 있다.
+- 그렇다면 ssh-agent에 왜 등록해야 할까?
+  - SSH 키를 생성할 때 비밀번호를 입력했다면 git 원격 서버에 접속할 때마다 비밀번호를 입력해야 한다. 이는 매우 번거롭다.
+  - ssh-agent는 개인키의 비밀번호를 암호화하여 기억해 사용자는 또 비밀번호를 입력하지 않도록 할 수 있다.
+  - 만약, SSH 키를 생성할 때 비밀번호를 입력하지 않았다면 ssh-agent를 설정하지 않아도 된다.
+
+<br />
+<br />
+
+### 2.2 작업
+
+- ssh-agent에 등록하는 방법은 다음과 같다.
+- <Highlight>ssh-add "개인키 파일 이름"</Highlight>
+
+<CodeBlock>
+  $ ssh-add id_rsa_personal
+  <br />$ ssh-add id-rsa_company
+</CodeBlock>
+
+<br />
+<br />
+<br />
+
+## 3. 원격서버에 SSH 키 등록하기
+
+### 3.1 사전 작업
+
+- git 원격서버에 SSH 키를 등록하기 위해 로그인 한 뒤 다음 경로를 따라 이동한다.
+
+  - github
+
+    - <Highlight>Settings</Highlight> - 왼쪽 목록에서 <Highlight>
+        SSH and GPG keys
+      </Highlight> - SSH Keys 항목에서 <Highlight>New SSH Key</Highlight>
+
+  <Image src={gitMultiAuth4} />
+
+  - gitlab
+    - <Highlight>Settings</Highlight> - 왼쪽 목록에서 <Highlight>
+        SSH and GPG keys
+      </Highlight>
+
+  <Image src={gitMultiAuth5} />
+
+<br />
+<br />
+<br />
+
+### 3.2 작업
+
+- SSH 키값을 복사하기 위해서 다음 명령어를 수행한다.
+- <Highlight>cat ~/.ssh/"공개키 파일 이름"</Highlight>
+
+<CodeBlock>$ cat ~/.ssh/id_rsa_personal.pube</CodeBlock>
+
+<Image src={gitMultiAuth6} />
+
+- 위 키를 복사한 뒤 원격 서버에 등록을 해주면 된다.
+- 주의해야 할 점은 반드시 <Highlight>.pub</Highlight> 확장자인 공개키를 복사해야 하고 키는 <Highlight>ssh-rsa</Highlight>로 시작한다.
+
+<Image src={gitMultiAuth7} />
+
+- Title 항목에는 원하는 이름을 적고
+- Key 항목에는 복사한 키 값을 넣어주면 된다.
+
+<br />
+<br />
+<br />
+
+## 4. config 설정
+
+- 터미널에서 다음 명령어를 실행해 config를 설정해보자.
+- <Highlight>vim ~/.ssh/config</Highlight>
+
+- 그 후, 다음과 같이 수정해보자.
+
+<CodeBlock>
+# personal <br />
+Host github.com <br />
+HostName github.com <br />
+User git <br />
+IdentityFile ~/.ssh/id_rsa_personal <br /><br />
+# company <br />
+Host gitlab.회사.com <br />
+HostName gitlab.com <br />
+User git <br />
+IdentityFile ~/.ssh/id_rsa_company
+</CodeBlock>
+
+- 여기서 중요한 항목은 <Highlight>Host</Highlight>와 <Highlight>IdentityFile</Highlight> 이다.
+  - Host: 사용하고자 하는 Host 도메인 주소를 넣으면 된다.
+  - IdentityFile: 원격 서버에서 공개키 값을 복사해 넣어놓은 개인키 파일의 이름을 설정해주어야 한다.
+
+
+<Blockquote>
+<h3>추가</h3>
+<ul>
+  <li>HostName을 Host와 다르게 설정했을 때 레포지토리에 접근이 안되는 문제가 있었다.</li>
+  <li>다행히 HostName도 Host와 동일하게 설정해주면 접근이 됐지만 어떠한 이유인지는 잘 모르겠다...</li>
+</ul>
+</Blockquote>
+
+- 저장한 후, 연결이 되는지 터미널에서 확인해볼 수 있다.
+- 다음 명령어를 실행해보자.
+- <Highlight>ssh -T "host 이름"</Highlight>
+
+<br />
+<br />
+<br />
+
+## 5. gitconfig 전역 설정
+
+- 마지막으로 ~/.gitconfig에 전역 설정을하면 된다.
+- 터미널에서 다음 명령어를 실행해 gitconfig를 설정해보자.
+- <Highlight>vim ~/.gitconfig</Highlight>
+- 그 후, 다음과 같이 수정해보자.
+
+<CodeBlock>
+[user] <br />
+  &nbsp; email = example@example.com <br />
+  &nbsp; name = example <br />
+[includeIf "gitdir:~/회사 디렉토리 경로/"] <br />
+  &nbsp; path = .gitconfig-company
+</CodeBlock>
+
+- <Highlight>includeIf</Highlight>는 ~/회사 프로젝트 디렉토리 경로/하위 폴더에서 ~/.gitconfig-compnay 파일을 불러오는 역할을 한다.
+- 그 후 터미널에서 path 항목과 이름이 같은 gitconfig-company 파일을 설정해주면 된다.
+- <Highlight>vim ~/.gitconfig-company</Highlight>
+
+<CodeBlock>
+[user] <br />
+  &nbsp; email = example@example.com <br />
+  &nbsp; name = example <br />
+</CodeBlock>
+
+<br />
+<br />
+<br />
+
+## 6. 확인하기
+
+- git이 설정된 프로젝트 디렉토리로 가서 다음 명령어를 실행해보자.
+- <Highlight>git config --list</Highlight>
+- 중간에 다음과 같이 나온다면 설정이 끝난 것이다.
+
+<CodeBlock>
+user.email=example@example.com <br />
+user.name=example <br />
+includeif.gitdir:~/회사 디렉토리/.path=.gitconfig-company <br />
+user.email=example@example.회사.com <br />
+user.name=example_회사
+</CodeBlock>
+
+- 또는, 다음과 같이 확인할 수 있다.
+- 회사 디렉토리 하위 폴더로 이동해 다음 명령어를 실행해보자.
+- <Highlight>git config --get user.email</Highlight>
+
+<CodeBlock>
+example@example.회사.com
+</CodeBlock>
+
+- 그리고 개인 프로젝트 디렉토리로 이동해 다시 명령어를 실행해보자.
+
+<CodeBlock>
+example@example.com
+</CodeBlock>
+
+- 위 예처럼 다르게 나온다면 설정이 끝난 것이다.
+
+<Source 
+  lists={[
+    ["git-config의 cinditional includes", "https://git-scm.com/docs/git-config#_conditional_includes"],
+    ["git 공개키 만들기", "https://git-scm.com/book/ko/v2/Git-%EC%84%9C%EB%B2%84-SSH-%EA%B3%B5%EA%B0%9C%ED%82%A4-%EB%A7%8C%EB%93%A4%EA%B8%B0"],
+    ["Conditional Include를 사용하여 디렉토리 별 gitconfig 설정하기", "https://til.younho9.dev/log/2021/gitconfig-conditional-include/"]
+  ]} 
+/>

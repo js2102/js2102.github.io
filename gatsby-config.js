@@ -4,7 +4,8 @@ require("dotenv").config({
 
 module.exports = {
   siteMetadata: {
-    title: "js2021",
+    title: "JS2102",
+    description: "Javascript 개발을 즐겨하는 개발자의 블로그",
   },
   plugins: [
     "gatsby-plugin-image",
@@ -12,11 +13,16 @@ module.exports = {
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        name: `blog`,
-        path: `${__dirname}/blog`,
+        name: `post`,
+        path: `${__dirname}/post`,
       },
     },
-    "gatsby-plugin-mdx",
+    {
+      resolve: "gatsby-plugin-mdx",
+      options: {
+        extensions: [`.mdx`, `.md`],
+      },
+    },
     "gatsby-transformer-sharp",
     {
       resolve: `gatsby-plugin-emotion`,

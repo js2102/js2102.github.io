@@ -1,23 +1,40 @@
+import React from "react";
+import { Link } from "gatsby";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 
 export const Wrapper = ({ children }) => {
   const WrapperStyle = css({
     width: "50%",
-    margin: "64px auto 0 auto",
-  });
+    minWidth: "700px",
+    minHeight: `calc(${window.innerHeight}px - 520px)`,
+    margin: "64px auto",
 
+    "@media only screen and (max-width: 768px)": {
+      width: "70%",
+      minWidth: 0,
+    },
+  });
   return <div className={WrapperStyle}>{children}</div>;
 };
 
-export const Keyword = ({ keywordCount, keywords }) => {
+export const Keyword = ({ keywordCount, keywords, query }) => {
   const keywordWrapperStyle = css({
     display: "flex",
+    listStyle: "none",
+    height: "30px",
+    lineHeight: "19px",
+    padding: 0,
+
+    overflow: "auto",
+    whiteSpace: "nowrap",
+
+    "&::-webkit-scrollbar": {
+      display: "none",
+    },
   });
 
   const keywordStyle = css({
-    display: "inline-flex",
-    alignItems: "center",
     backgroundColor: "#EEEEEE",
     color: "#646FD4",
     fontWeight: "bold",
@@ -29,24 +46,53 @@ export const Keyword = ({ keywordCount, keywords }) => {
     },
   });
 
+  const activeKeywordStyle = css({
+    backgroundColor: "#646FD4",
+    color: "#EEEEEE",
+  });
+
+  const keywordLinkStyle = css({
+    color: "inherit",
+    textDecoration: "none",
+  });
+
   return (
-    <div className={keywordWrapperStyle}>
-      <div className={keywordStyle}>All ({keywordCount})</div>
+    <ul className={keywordWrapperStyle}>
+      <li
+        className={cx(
+          keywordStyle,
+          (!query || query === "All") && activeKeywordStyle
+        )}>
+        <a className={keywordLinkStyle} href={`?keyword=All`}>
+          All({keywordCount})
+        </a>
+      </li>
       {keywords.map((keyword) => (
-        <div className={keywordStyle} key={keyword[0]}>
-          {keyword[0]} ({keyword[1]})
-        </div>
+        <li
+          className={cx(
+            keywordStyle,
+            query === keyword[0] && activeKeywordStyle
+          )}
+          key={keyword[0]}>
+          <a className={keywordLinkStyle} href={`?keyword=${keyword[0]}`}>
+            {keyword[0]}({keyword[1]})
+          </a>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };
 
-export const Post = ({ mdx }) => {
+export const Post = ({ posts }) => {
   const postWrapper = css({
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
     gridGap: "20px",
     margin: "48px 0 64px 0",
+
+    "@media only screen and (max-width: 768px)": {
+      gridTemplateColumns: "1fr",
+    },
   });
 
   const postItemWrapper = css({
@@ -60,6 +106,11 @@ export const Post = ({ mdx }) => {
       boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
     },
 
+    ".link": {
+      textDecoration: "none",
+      color: "inherit",
+    },
+
     ".image": {
       width: "100%",
       height: "200px",
@@ -70,11 +121,12 @@ export const Post = ({ mdx }) => {
       flex: 1,
       display: "flex",
       flexDirection: "column",
-      padding: "15px",
+      padding: "10px 15px",
 
       ".title": {
         fontSize: "20px",
         fontWeight: 700,
+        margin: "5px 0",
       },
 
       ".date": {
@@ -87,14 +139,14 @@ export const Post = ({ mdx }) => {
         display: "flex",
         flexWrap: "wrap",
         marginTop: "10px",
-        margin: "10px -5px",
+        margin: "5px -5px",
 
         ".keyword": {
           backgroundColor: "#EEEEEE",
           color: "#646FD4",
           fontSize: "14px",
           fontWeight: 700,
-          margin: "2.5px 5px",
+          margin: "3px 5px",
           borderRadius: "3px",
           padding: "3px 5px",
         },
@@ -103,37 +155,40 @@ export const Post = ({ mdx }) => {
       ".summary": {
         display: "-webkit-box",
         overflow: "hidden",
-        marginTop: "auto",
         textOverflow: "ellipsis",
         whiteSpace: "normal",
         overflowWrap: "break-word",
         fontSize: "16px",
         opacity: 0.8,
+        marginBottom: "8px",
       },
     },
   });
 
   return (
     <div className={postWrapper}>
-      {mdx.map((node) => (
-        <div className={postItemWrapper} key={node.id}>
-          <GatsbyImage
-            className="image"
-            image={getImage(node.frontmatter.hero_image.childrenImageSharp[0])}
-            alt={node.frontmatter.hero_image_alt}
-          />
-          <div className="content">
-            <div className="title">{node.frontmatter.title}</div>
-            <div className="date">{node.frontmatter.date}</div>
-            <div className="keyword-wrapper">
-              {node.frontmatter.tags.map((tag) => (
-                <div className="keyword" key={tag}>
-                  {tag}
-                </div>
-              ))}
+      {posts.map((post) => (
+        <div className={postItemWrapper} key={post.id}>
+          <Link className="link" to={`/post/${post.slug}`}>
+            <GatsbyImage
+              className="image"
+              image={getImage(post.frontmatter.thumbnail.childrenImageSharp[0])}
+              alt={post.frontmatter.thumbnail_alt}
+            />
+            <div className="content">
+              <div className="keyword-wrapper">
+                {post.frontmatter.keywords.map((keyword) => (
+                  <div className="keyword" key={keyword}>
+                    {keyword}
+                  </div>
+                ))}
+              </div>
+              <div className="title">{post.frontmatter.title}</div>
+              <div className="summary">{post.frontmatter.summary}</div>
+              <div className="date">{post.frontmatter.date}</div>
+              {/* <div className="summary">{post.frontmatter.summary}</div> */}
             </div>
-            <div className="summary">{node.frontmatter.summary}</div>
-          </div>
+          </Link>
         </div>
       ))}
     </div>
