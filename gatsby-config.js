@@ -33,5 +33,12 @@ module.exports = {
         cssPropOptimization: true,
       },
     },
+    {
+      resolve: "gatsby-plugin-canonical-urls",
+      options: {
+        siteUrl: "https://js2102.github.io/",
+        stripQueryString: true,
+      },
+    },
   ],
 };

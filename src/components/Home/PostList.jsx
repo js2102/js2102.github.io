@@ -7,7 +7,7 @@ export const Wrapper = ({ children }) => {
   const WrapperStyle = css({
     width: "50%",
     minWidth: "700px",
-    minHeight: `calc(${window.innerHeight}px - 520px)`,
+    minHeight: "50vh",
     margin: "64px auto",
 
     "@media only screen and (max-width: 768px)": {
@@ -18,7 +18,13 @@ export const Wrapper = ({ children }) => {
   return <div className={WrapperStyle}>{children}</div>;
 };
 
-export const Keyword = ({ keywordCount, keywords, query }) => {
+export const Keyword = ({
+  keywordCount,
+  keywords,
+  query,
+  selectKeyword,
+  setSelectKeyword,
+}) => {
   const keywordWrapperStyle = css({
     display: "flex",
     listStyle: "none",
@@ -61,22 +67,26 @@ export const Keyword = ({ keywordCount, keywords, query }) => {
       <li
         className={cx(
           keywordStyle,
-          (!query || query === "All") && activeKeywordStyle
+          (!selectKeyword || selectKeyword === "All") && activeKeywordStyle
         )}>
-        <a className={keywordLinkStyle} href={`?keyword=All`}>
+        <div
+          className={keywordLinkStyle}
+          onClick={() => setSelectKeyword("All")}>
           All({keywordCount})
-        </a>
+        </div>
       </li>
       {keywords.map((keyword) => (
         <li
           className={cx(
             keywordStyle,
-            query === keyword[0] && activeKeywordStyle
+            selectKeyword === keyword[0] && activeKeywordStyle
           )}
           key={keyword[0]}>
-          <a className={keywordLinkStyle} href={`?keyword=${keyword[0]}`}>
+          <div
+            className={keywordLinkStyle}
+            onClick={() => setSelectKeyword(keyword[0])}>
             {keyword[0]}({keyword[1]})
-          </a>
+          </div>
         </li>
       ))}
     </ul>

@@ -1,4 +1,5 @@
 import { graphql } from "gatsby";
+import React, { useState } from "react";
 import queryString from "query-string";
 
 import { Layout } from "../components/Base/Layout";
@@ -18,11 +19,14 @@ const IndexPage = ({ data }) => {
   const keywords = Object.entries(keywordData);
   keywords.sort((a, b) => b[1] - a[1]);
 
-  const query = queryString.parse(location.search).keyword;
+  const [selectKeyword, setSelectKeyword] = useState("All");
+
   const posts =
-    !query || query === "All"
+    !selectKeyword || selectKeyword === "All"
       ? allMdxNodes
-      : allMdxNodes.filter((mdx) => mdx.frontmatter.keywords.includes(query));
+      : allMdxNodes.filter((mdx) =>
+          mdx.frontmatter.keywords.includes(selectKeyword)
+        );
 
   return (
     <Layout pageTitle="Home">
@@ -31,7 +35,8 @@ const IndexPage = ({ data }) => {
         <PostList.Keyword
           keywordCount={keywordCount}
           keywords={keywords}
-          query={query}
+          selectKeyword={selectKeyword}
+          setSelectKeyword={setSelectKeyword}
         />
         <PostList.Post posts={posts} />
       </PostList.Wrapper>

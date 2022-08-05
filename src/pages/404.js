@@ -5,7 +5,7 @@ import { Layout } from "../components/Base/Layout";
 
 const NotFoundPage = () => {
   const Wrapper = css({
-    height: `calc(${window.innerHeight}px - 120px)`,
+    height: `89vh`,
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
