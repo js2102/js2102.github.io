@@ -117,6 +117,15 @@ export const Body = ({ body }) => {
     li: {
       marginTop: "8px",
     },
+    pre: {
+      width: "fit-content",
+      background: "#F8F9FA",
+      marginLeft: "16px",
+      padding: "8px 12px",
+    },
+    code: {
+      fontSize: "16px",
+    },
 
     "@media only screen and (max-width: 768px)": {
       width: "90%",

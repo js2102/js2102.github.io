@@ -12,7 +12,6 @@ import { Image } from "../../../src/components/Common/Image";
 import { Link } from "../../../src/components/Common/Link";
 import { Source } from "../../../src/components/Common/Source";
 import { Highlight } from "../../../src/components/Common/Highlight";
-import { CodeBlock } from "../../../src/components/Common/CodeBlock";
 import { Blockquote } from "../../../src/components/Common/Blockquote";
 import { TextHighlight } from "../../../src/components/Common/TextHighlight";
 
@@ -44,14 +43,20 @@ import vueResponsive1 from "./image/vue-responsive-1.png";
 
 ### 1.2 관련 주의사항
 
-- 위에서 살표보았듯이 Vue는 인스턴스 초기화 중 getter와 setter로 변환 프로세스를 진행하기 때문에 data 객체에 속성이 있어야 한다.
+- 위에서 살펴보았듯이 Vue는 인스턴스 초기화 중 getter와 setter로 변환 프로세스를 진행하기 때문에 data 객체에 속성이 있어야 한다.
 - 이 때, 주의할 점은 Vue는 이미 만들어진 인스턴스에 새로운 루트 수준의 반응 속성을 동적으로 추가하는 것을 허용하지 않는다.
 - 즉, 모든 루트 수준의 반응성 데이터 속성을 빈 값으로라도 초기에 선언하는 것을 추천한다.
 
-<CodeBlock>
-var vm = new Vue()
-</CodeBlock>
 
+```
+var vm = new Vue({
+  data: {
+    a: 1
+  }
+})
+
+vm.b = 2
+```
 
 
 - 하지만, 최신 Javascript에서 Object.observe를 지원하지 않는 문제로 인해 Vue는 속성의 추가 제거를 감지할 수 없는 문제가 발생했고

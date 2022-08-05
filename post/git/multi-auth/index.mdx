@@ -12,7 +12,6 @@ import { Image } from "../../../src/components/Common/Image";
 import { Link } from "../../../src/components/Common/Link";
 import { Source } from "../../../src/components/Common/Source";
 import { Highlight } from "../../../src/components/Common/Highlight";
-import { CodeBlock } from "../../../src/components/Common/CodeBlock";
 import { Blockquote } from "../../../src/components/Common/Blockquote";
 import { TextHighlight } from "../../../src/components/Common/TextHighlight";
 
@@ -44,11 +43,11 @@ import gitMultiAuth7 from "./image/git-multi-auth-7.png";
   - 터미널에서 <Highlight>cd ~/.ssh</Highlight> 명령어를 치고 ~/.ssh 디렉토리로 넘어가보자
 - 그 후, <Highlight>ls</Highlight> 명령어를 치면 생성된 SSH 공개키들을 확인할 수 있다.
 
-<CodeBlock>
-  $ cd ~/.ssh <br />
-  $ ls <br />
-  authorized_keys2 id_dsa known_hosts config id_dsa.pub
-</CodeBlock>
+```
+$ cd ~/.ssh <br />
+$ ls <br />
+authorized_keys2 id_dsa known_hosts config id_dsa.pub
+```
 
 - id_dsa나 id_rsa 파일이 존재할 것이다. 뒤에 확장자가 <Highlight>.pub</Highlight>인 것은 공개키를 의미하고 나머지는 개인키를 의미한다.
 
@@ -60,7 +59,9 @@ import gitMultiAuth7 from "./image/git-multi-auth-7.png";
 - 이제 개인과 회사용 SSH 키를 2개 생성해보자. SSH 공개키 를 생성하는 명령어는 다음과 같다.
 - <Highlight>ssh-keygen -t rsa -b 4096 -C "이메일"</Highlight>
 
-<CodeBlock>$ ssh-keygen -t rsa -b 4096 -C "example@example.com"</CodeBlock>
+```
+$ ssh-keygen -t rsa -b 4096 -C "example@example.com"
+```
 
 - 위 명령어를 입력하면 다음과 같이 파일 경로와 파일 이름을 설정하라고 뜬다.
 
@@ -78,16 +79,11 @@ import gitMultiAuth7 from "./image/git-multi-auth-7.png";
 - Enter 키를 두 번 누르게 되면 파일이 생성된다.
 - SSH 키를 keygen으로 2개를 생성하면 총 4개의 파일이 추가로 생성된다.
 
-<CodeBlock>
-  $ ls
-  <br />
-  authorized_keys2 id_dsa known_hosts config
-  <TextHighlight color="#7D9D9C" paddingX={24}>/* 기존 */</TextHighlight>
-  <br />
-  id_rsa_campany.pub id_rsa_personal.pub id_rsa_campany id_rsa_personal
-  <TextHighlight color="#7D9D9C" paddingX={24}>/* 추가 */</TextHighlight>
-  <br />
-</CodeBlock>
+```
+$ ls
+authorized_keys2 id_dsa known_hosts config   /* 기존 */
+id_rsa_campany.pub id_rsa_personal.pub id_rsa_campany id_rsa_personal   /* 추가 */
+```
 
 <br />
 <br />
@@ -111,10 +107,10 @@ import gitMultiAuth7 from "./image/git-multi-auth-7.png";
 - ssh-agent에 등록하는 방법은 다음과 같다.
 - <Highlight>ssh-add "개인키 파일 이름"</Highlight>
 
-<CodeBlock>
-  $ ssh-add id_rsa_personal
-  <br />$ ssh-add id-rsa_company
-</CodeBlock>
+```
+$ ssh-add id_rsa_personal
+$ ssh-add id-rsa_company
+```
 
 <br />
 <br />
@@ -150,7 +146,9 @@ import gitMultiAuth7 from "./image/git-multi-auth-7.png";
 - SSH 키값을 복사하기 위해서 다음 명령어를 수행한다.
 - <Highlight>cat ~/.ssh/"공개키 파일 이름"</Highlight>
 
-<CodeBlock>$ cat ~/.ssh/id_rsa_personal.pube</CodeBlock>
+```
+$ cat ~/.ssh/id_rsa_personal.pube
+```
 
 <Image src={gitMultiAuth6} />
 
@@ -173,18 +171,19 @@ import gitMultiAuth7 from "./image/git-multi-auth-7.png";
 
 - 그 후, 다음과 같이 수정해보자.
 
-<CodeBlock>
-# personal <br />
-Host github.com <br />
-HostName github.com <br />
-User git <br />
-IdentityFile ~/.ssh/id_rsa_personal <br /><br />
-# company <br />
-Host gitlab.회사.com <br />
-HostName gitlab.com <br />
-User git <br />
+```
+# personal
+Host github.com
+HostName github.com
+User git
+IdentityFile ~/.ssh/id_rsa_personal
+
+# company
+Host gitlab.회사.com
+HostName gitlab.com
+User git
 IdentityFile ~/.ssh/id_rsa_company
-</CodeBlock>
+```
 
 - 여기서 중요한 항목은 <Highlight>Host</Highlight>와 <Highlight>IdentityFile</Highlight> 이다.
   - Host: 사용하고자 하는 Host 도메인 주소를 넣으면 된다.
@@ -214,23 +213,22 @@ IdentityFile ~/.ssh/id_rsa_company
 - <Highlight>vim ~/.gitconfig</Highlight>
 - 그 후, 다음과 같이 수정해보자.
 
-<CodeBlock>
-[user] <br />
-  &nbsp; email = example@example.com <br />
-  &nbsp; name = example <br />
-[includeIf "gitdir:~/회사 디렉토리 경로/"] <br />
-  &nbsp; path = .gitconfig-company
-</CodeBlock>
-
+```
+[user]
+  email = example@example.com
+  name = example
+[includeIf "gitdir:~/회사 디렉토리 경로/"]
+  path = .gitconfig-company
+```
 - <Highlight>includeIf</Highlight>는 ~/회사 프로젝트 디렉토리 경로/하위 폴더에서 ~/.gitconfig-compnay 파일을 불러오는 역할을 한다.
 - 그 후 터미널에서 path 항목과 이름이 같은 gitconfig-company 파일을 설정해주면 된다.
 - <Highlight>vim ~/.gitconfig-company</Highlight>
 
-<CodeBlock>
-[user] <br />
-  &nbsp; email = example@example.com <br />
-  &nbsp; name = example <br />
-</CodeBlock>
+```
+[user]
+  email = example@example.com
+  name = example
+```
 
 <br />
 <br />
@@ -242,27 +240,27 @@ IdentityFile ~/.ssh/id_rsa_company
 - <Highlight>git config --list</Highlight>
 - 중간에 다음과 같이 나온다면 설정이 끝난 것이다.
 
-<CodeBlock>
-user.email=example@example.com <br />
-user.name=example <br />
-includeif.gitdir:~/회사 디렉토리/.path=.gitconfig-company <br />
-user.email=example@example.회사.com <br />
+```
+user.email=example@example.com
+user.name=example
+includeif.gitdir:~/회사 디렉토리/.path=.gitconfig-company
+user.email=example@example.회사.com
 user.name=example_회사
-</CodeBlock>
+```
 
 - 또는, 다음과 같이 확인할 수 있다.
 - 회사 디렉토리 하위 폴더로 이동해 다음 명령어를 실행해보자.
 - <Highlight>git config --get user.email</Highlight>
 
-<CodeBlock>
+```
 example@example.회사.com
-</CodeBlock>
+```
 
 - 그리고 개인 프로젝트 디렉토리로 이동해 다시 명령어를 실행해보자.
 
-<CodeBlock>
+```
 example@example.com
-</CodeBlock>
+```
 
 - 위 예처럼 다르게 나온다면 설정이 끝난 것이다.
 
