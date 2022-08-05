@@ -1,0 +1,64 @@
+---
+title: "Vue 반응형과 nextTick"
+thumbnail: "./Vue.png"
+thumbnail_alt: "Vue"
+summary: ""
+date: "2022-08-01"
+keywords:
+  - Vue
+---
+
+import { Image } from "../../../src/components/Common/Image";
+import { Link } from "../../../src/components/Common/Link";
+import { Source } from "../../../src/components/Common/Source";
+import { Highlight } from "../../../src/components/Common/Highlight";
+import { CodeBlock } from "../../../src/components/Common/CodeBlock";
+import { Blockquote } from "../../../src/components/Common/Blockquote";
+import { TextHighlight } from "../../../src/components/Common/TextHighlight";
+
+import vueResponsive1 from "./image/vue-responsive-1.png";
+
+<Blockquote>
+  개발을 하다가 Javascript 비동기 처리 문제로 인해 DOM을 찾지 못하는 문제가 발생했어서 정리해보기로 했다. 
+</Blockquote>
+
+## 1. Vue의 동작원리
+
+### 1.1 Vue의 반응형
+
+- Vue의 가장 큰 특징 중 하나는 <Highlight>반응형</Highlight>으로 데이터가 수정되면 화면이 갱신된다.
+- Vue는 어떻게 변경 내용을 추적할까?
+
+  <Image src={vueResponsive1} />
+
+- Vue 인스턴스에 데이터를 담은 객체를 <Highlight>data</Highlight> 옵션으로 전달하면
+  Vue는 모든 속성에 <Link link="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank">Object.defineProperty</Link>를
+  사용하여 <Highlight>getter</Highlight>와 <Highlight>setter</Highlight>로 변환한다.
+- <Highlight>getter</Highlight>와 <Highlight>setter</Highlight>는 속성에 액세스 하거나 수정할 때 Vue가 종속성 추적 및 변경 알림을 수행한다.
+- 모든 컴포넌트 인스턴스에는 해당 <Highlight>watcher</Highlight> 인스턴스가 있는데 이 인스턴스는 컴포넌트가 종속적으로 렌더링되는 동안 수정된 모든 속성을 기록한다.
+- 예를 들어, 종속적인 setter가 트리거 되면 watcher에 알리고 컴포넌트가 다시 리렌더링된다.
+
+
+<br />
+<br />
+
+### 1.2 관련 주의사항
+
+- 위에서 살표보았듯이 Vue는 인스턴스 초기화 중 getter와 setter로 변환 프로세스를 진행하기 때문에 data 객체에 속성이 있어야 한다.
+- 이 때, 주의할 점은 Vue는 이미 만들어진 인스턴스에 새로운 루트 수준의 반응 속성을 동적으로 추가하는 것을 허용하지 않는다.
+- 즉, 모든 루트 수준의 반응성 데이터 속성을 빈 값으로라도 초기에 선언하는 것을 추천한다.
+
+<CodeBlock>
+var vm = new Vue()
+</CodeBlock>
+
+
+
+- 하지만, 최신 Javascript에서 Object.observe를 지원하지 않는 문제로 인해 Vue는 속성의 추가 제거를 감지할 수 없는 문제가 발생했고
+
+
+<Source 
+  lists={[
+    ["Vue 반응형에 대해 알아보기", "https://kr.vuejs.org/v2/guide/reactivity.html#%EB%B9%84%EB%8F%99%EA%B8%B0-%EA%B0%B1%EC%8B%A0-%ED%81%90"]
+  ]} 
+/>
