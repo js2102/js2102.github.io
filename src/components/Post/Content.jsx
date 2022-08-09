@@ -119,6 +119,7 @@ export const Body = ({ body }) => {
     },
     pre: {
       width: "fit-content",
+      whiteSpace: "pre-wrap",
       background: "#F8F9FA",
       marginLeft: "16px",
       padding: "8px 12px",
