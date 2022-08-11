@@ -25,7 +25,7 @@ import vueResponsive1 from "./image/vue-responsive-1.png";
 
 ### 1.1 Vue의 반응형
 
-- Vue의 가장 큰 특징 중 하나는 <Highlight>반응형</Highlight>으로 데이터가 수정되면 화면이 갱신된다.
+- Vue의 가장 큰 특징 중 하나는 <Highlight>반응형</Highlight>으로 데이터가 변경되면 화면이 갱신된다.
 - Vue는 어떻게 변경 내용을 추적할까?
 
   <Image src={vueResponsive1} />
@@ -35,7 +35,7 @@ import vueResponsive1 from "./image/vue-responsive-1.png";
   사용하여 <Highlight>getter</Highlight>와 <Highlight>setter</Highlight>로 변환한다.
 - <Highlight>getter</Highlight>와 <Highlight>setter</Highlight>는 속성에 액세스 하거나 수정할 때 Vue가 종속성 추적 및 변경 알림을 수행한다.
 - 모든 컴포넌트 인스턴스에는 해당 <Highlight>watcher</Highlight> 인스턴스가 있는데 이 인스턴스는 컴포넌트가 종속적으로 렌더링되는 동안 수정된 모든 속성을 기록한다.
-- 예를 들어, 종속적인 setter가 트리거 되면 watcher에 알리고 컴포넌트가 다시 리렌더링된다.
+- 예를 들어, 종속적인 setter가 트리거 되면 watcher에 알려 수정된 속성을 기록하고 컴포넌트가 다시 리렌더링된다.
 
 
 <br />
