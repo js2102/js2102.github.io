@@ -6,7 +6,6 @@ export const Baseline = ({ children }) => (
     <hr
       style={{
         borderTop: "2px solid #646fd4",
-        padding: "24px 0",
       }}>
       {children}
     </hr>
