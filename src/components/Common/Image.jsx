@@ -1,8 +1,8 @@
 import { css } from "@emotion/css";
 
-export const Image = ({ src, alt = "이미지" }) => (
+export const Image = ({ src, alt = "이미지", width = "100%" }) => (
   <div className={ImageStyle}>
-    <img src={src} alt={alt} />
+    <img src={src} alt={alt} width={width} />
   </div>
 );
 
