@@ -3,7 +3,7 @@ title: "Vue 반응형과 nextTick"
 thumbnail: "./Vue.png"
 thumbnail_alt: "Vue"
 summary: ""
-date: "2022-08-01"
+date: "2022-08-12"
 keywords:
   - Vue
 ---
@@ -11,12 +11,16 @@ keywords:
 import { Image } from "../../../src/components/Common/Image";
 import { Link } from "../../../src/components/Common/Link";
 import { Source } from "../../../src/components/Common/Source";
+import { Baseline } from "../../../src/components/Common/Baseline";
 import { Highlight } from "../../../src/components/Common/Highlight";
 import { Blockquote } from "../../../src/components/Common/Blockquote";
 import { TextHighlight } from "../../../src/components/Common/TextHighlight";
 
 import vueResponsive1 from "./image/vue-responsive-1.png";
 import vueResponsive2 from "./image/vue-responsive-2.png";
+import vueResponsive3 from "./image/vue-responsive-3.png";
+import vueResponsive4 from "./image/vue-responsive-4.png";
+import vueResponsive5 from "./image/vue-responsive-5.png";
 
 <Blockquote>
   개발을 하다가 Javascript 비동기 처리 문제로 인해 DOM을 찾지 못하는 문제가 발생했어서 정리해보기로 했다. 
@@ -46,7 +50,7 @@ import vueResponsive2 from "./image/vue-responsive-2.png";
 
 - 위에서 살펴보았듯이 Vue는 인스턴스 초기화 중 getter와 setter로 변환 프로세스를 진행하기 때문에 data 객체에 속성이 있어야 한다.
 - 이 때, 주의할 점은 Vue는 이미 만들어진 인스턴스에 새로운 루트 수준의 반응 속성을 동적으로 추가하는 것을 허용하지 않는다.
-- 즉, 모든 루트 수준의 반응성 데이터 속성을 빈 값으로라도 초기에 선언하는 것을 추천한다.
+- 즉, 모든 루트 수준의 반응성 데이터 속성을 <TextHighlight color="#E64848">빈 값으로라도 초기에 선언</TextHighlight>하는 것을 추천한다.
 
 ```
 export default {
@@ -61,6 +65,11 @@ export default {
 ```
 
 - 그렇다면 data 객체에 동적으로 속성을 추가할 수는 없을까?
+- 결론부터 말하자면 동적으로 속성을 추가할 수는 있지만 제대로 작동하지는 않는다.
+
+<br />
+
+- 먼저, this.$data에 접근해서 동적으로 데이터를 추가해보자.
 
 ```
 export default {
@@ -79,25 +88,63 @@ export default {
 }
 ```
 
-- Vue에서는 다음과 같은 경고를 띄운다.
+- Vue에서는 다음과 같은 root 수준의 data 속성을 직접 사용하지 말라는 경고를 띄운다.
 
-  <Image src={vueResponsive2} />
+  <Image src={vueResponsive2} width="600px" />
+
+<br />
+
+- 이번에는 <Link link="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank">Object.assign()</Link>을 통해서 동적으로 데이터를 추가해보자.
+
+```
+export default {
+  data() {
+    return {
+      a: 1,
+      b: 2,
+      c: 3
+    }
+  },
+  created() {
+    console.log(this.$data);
+    Object.assign(this.$data, {d: 4});
+    console.log(this.$data);
+  }
+}
+```
+
+  <Image src={vueResponsive3} width="400px" />
+
+
+- 데이터가 동적으로 추가된 것을 확인할 수 있다.
+- 하지만, 이 경우 동적으로 추가된 새 속성은 변경 내용이 트리거 되지 않는다. 
+- 즉, 위에서 살펴 보았던 Vue의 특징인 반응형이 제대로 동작하지 않는 다는 것이다.
+
+  <Image src={vueResponsive4} width="400px" />
+
+- 출력된 콘솔을 살펴보면 속성 a, b, c에 대한 getter와 setter 메서드는 준비가 되어있지만 속성 d는 준비가 되어있지 않다.
+- 이는 종속성 추적 및 변경 알림을 수행하지 않는다는 것을 말해준다.
+
+<br /> 
+
+- 이러한 문제 때문에 반응성 데이터로 사용하려는 속성을 빈 값으로라도 초기에 선언하는 것이 좋다.
 
 <br />
 <br />
 
 ### 1.3 정리
 
-- Vue는 루트 수준의 반응성 속성을 동적으로 추가할 수 없다. 
+- Vue는 루트 수준의 반응성 속성을 동적으로 추가할 수는 있지만 반응형에 대해 제대로 작동하지 않는다.
 - 따라서, 모든 루트 수준의 반응성 데이터 속성을 빈 값으로라도 초기에 선언하여 초기화 해야 한다.
 
 <br />
 
 - 그리고 Vue는 data 객체를 컴포넌트 상태에 대한 <Highlight>스키마</Highlight> 라고 정의한다.
-- 이는 다른 개발자가 코드를 읽을 때 구성 요소 코드를 더 쉽게 이해 할 수 있도록 하는 장점이 있다.
+- 덧붙여서 이는 다른 개발자가 코드를 읽을 때 구성 요소 코드를 더 쉽게 이해 할 수 있도록 하는 장점이 있다고 말한다.
 
 
 <br />
+<Baseline />
 <br />
 
 ## 2. 비동기 갱신 큐
@@ -109,6 +156,10 @@ export default {
 <br />
 
 - 이 때, 이벤트 루프에서 같은 Watcher가 여러 번 발생하면 작업이 끝날 때가지 기다린 후 대기열에서 한번만 푸시된다.
+
+<Image src={vueResponsive5} width="800px" />
+
+
 - 이는 불필요한 작업을 줄여줌으로써 성능을 향상 시켜준다.
 
 <br />
@@ -143,8 +194,8 @@ export default {
 
 <br />
 
-- Vue.js는 개발자가 데이터 중심 방식으로 생각하고 DOM을 직접 건들지 않는 것을 권장한다.
-- 하지만, DOM을 직접 건드려야 할 경우가 발생하는데 이 때는 Vue.nextTick()을 사용하면 된다.
+- Vue.js는 개발자가 <Highlight>데이터 중심</Highlight> 방식으로 생각하고 DOM을 직접 건들지 않는 것을 권장한다.
+- 하지만, DOM을 직접 건드려야 할 경우가 발생하는데 이 때는 <Highlight>Vue.nextTick()</Highlight>을 사용하면 된다.
 
 <br />
 
@@ -175,10 +226,11 @@ export default {
 
 <br />
 
-- <Link link="https://v3.ko.vuejs.org/api/options-lifecycle-hooks.html" target="_blank">Vue 생명주기</Link> 메서드를 보면 created 메서드는 인스턴스가 생성된 후 동기적으로 호출된다. 즉, $el 속성을 사용할 수 없음을 의미한다.
-- 따라서, 위 created 생명주기 메서드에서는 당연히 DOM 조작을 할 수 없게되고 위 콘솔은 undefined가 출력된다.
-- 물론, $el 속성이 업데이트 되는 mounted 생명주기에서는 DOM을 조작할 수 있다.
-- 하지만, 데이터 변경 후 DOM을 조작해야 한다면 이 또한 undefined가 출력된다. 이 때에는 Vue.nextTick()을 사용하면된다.
+- <Link link="https://v3.ko.vuejs.org/api/options-lifecycle-hooks.html" target="_blank">Vue 생명주기</Link> 메서드를 보면 <Highlight>created</Highlight> 메서드는 인스턴스가 생성된 후 동기적으로 호출된다. 즉, $el 속성을 사용할 수 없음을 의미한다.
+- 따라서, 위 created 생명주기 메서드에서는 당연히 DOM 조작을 할 수 없게되고 콘솔에는 undefined가 출력된다.
+- 물론, $el 속성이 업데이트 되는 <Highlight>mounted</Highlight> 생명주기에서는 DOM을 조작할 수 있다.
+- 하지만, 데이터 변경 후 DOM을 조작해야 한다면 이 또한 undefined가 출력된다. 
+- 이 때에는 간단하게 Vue.nextTick()을 사용하면된다.
 
 ```
 <script>
@@ -199,7 +251,7 @@ export default {
 </script>
 ```
 - 이 때에는 div 태그가 정상적으로 출력되고 DOM을 조작할 수 있게 된다.
-- 참고로 nextTick은 promise를 반환하므로 ES2017의 async/await 문법을 같이 사용할 수 있다.
+- 참고로 nextTick은 <Highlight>promise</Highlight>를 반환하므로 ES2017의 <Link link="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/async_function">async/await</Link> 문법을 같이 사용할 수 있다.
 
 ```
 <script>
