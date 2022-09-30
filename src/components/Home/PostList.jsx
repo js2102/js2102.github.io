@@ -177,30 +177,35 @@ export const Post = ({ posts }) => {
 
   return (
     <div className={postWrapper}>
-      {posts.map((post) => (
-        <div className={postItemWrapper} key={post.id}>
-          <Link className="link" to={`/post/${post.slug}`}>
-            <GatsbyImage
-              className="image"
-              image={getImage(post.frontmatter.thumbnail.childrenImageSharp[0])}
-              alt={post.frontmatter.thumbnail_alt}
-            />
-            <div className="content">
-              <div className="keyword-wrapper">
-                {post.frontmatter.keywords.map((keyword) => (
-                  <div className="keyword" key={keyword}>
-                    {keyword}
+      {posts.map(
+        (post) =>
+          post.frontmatter.deploy && (
+            <div className={postItemWrapper} key={post.id}>
+              <Link className="link" to={`/post/${post.slug}`}>
+                <GatsbyImage
+                  className="image"
+                  image={getImage(
+                    post.frontmatter.thumbnail.childrenImageSharp[0]
+                  )}
+                  alt={post.frontmatter.thumbnail_alt}
+                />
+                <div className="content">
+                  <div className="keyword-wrapper">
+                    {post.frontmatter.keywords.map((keyword) => (
+                      <div className="keyword" key={keyword}>
+                        {keyword}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <div className="title">{post.frontmatter.title}</div>
-              <div className="summary">{post.frontmatter.summary}</div>
-              <div className="date">{post.frontmatter.date}</div>
-              {/* <div className="summary">{post.frontmatter.summary}</div> */}
+                  <div className="title">{post.frontmatter.title}</div>
+                  <div className="summary">{post.frontmatter.summary}</div>
+                  <div className="date">{post.frontmatter.date}</div>
+                  {/* <div className="summary">{post.frontmatter.summary}</div> */}
+                </div>
+              </Link>
             </div>
-          </Link>
-        </div>
-      ))}
+          )
+      )}
     </div>
   );
 };

@@ -55,6 +55,7 @@ export const query = graphql`
           date
           keywords
           summary
+          deploy
           thumbnail {
             childrenImageSharp {
               gatsbyImageData
