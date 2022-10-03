@@ -16,7 +16,10 @@ const BlogPost = ({ data }) => {
           keywords={data.mdx.frontmatter.keywords}
           date={data.mdx.frontmatter.date}
         />
-        <Content.Body body={data.mdx.body} />
+        <Content.BodyAndTocWrapper>
+          <Content.Body body={data.mdx.body} />
+          <Content.Toc toc={data.mdx.frontmatter.toc} />
+        </Content.BodyAndTocWrapper>
       </Content.Wrapper>
     </Layout>
   );
@@ -29,6 +32,7 @@ export const query = graphql`
         title
         date
         keywords
+        toc
         thumbnail_alt
         thumbnail {
           childImageSharp {

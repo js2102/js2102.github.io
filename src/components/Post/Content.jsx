@@ -1,6 +1,10 @@
-import { css } from "@emotion/css";
+import React, {useState} from "react";
+
+import { css, cx } from "@emotion/css";
 import { GatsbyImage } from "gatsby-plugin-image";
 import { MDXRenderer } from "gatsby-plugin-mdx";
+
+import useIntersectionObservation from "../../hooks/useIntersectionObservation";
 
 export const Wrapper = ({ children }) => {
   const postWrapperStyle = css({
@@ -12,7 +16,7 @@ export const Wrapper = ({ children }) => {
 
 export const Header = ({ image, imageAlt, title, keywords, date }) => {
   const headerStyle = css({
-    width: "70%",
+    width: "80%",
     position: "relative",
     margin: "0 auto",
 
@@ -106,11 +110,19 @@ export const Header = ({ image, imageAlt, title, keywords, date }) => {
   );
 };
 
+export const BodyAndTocWrapper = ({children}) => {
+  const bodyAndTocWrapperStyle = css({
+    display: "flex",
+    width: "80%",
+    margin: "64px auto",
+  });
+
+  return <div className={bodyAndTocWrapperStyle}>{children}</div>
+};
+
 export const Body = ({ body }) => {
   const bodyWrapper = css({
-    width: "70%",
-    margin: "64px auto",
-
+    flex: "0 0 70%",
     ul: {
       paddingLeft: "20px",
     },
@@ -138,4 +150,83 @@ export const Body = ({ body }) => {
       <MDXRenderer className="body">{body}</MDXRenderer>
     </div>
   );
+};
+
+export const Toc = ({ toc }) => {
+  const [activeId, setActiveId] = useState("content1");
+  useIntersectionObservation(setActiveId);
+
+  const TocWrapperStyle = css({
+    flex: "0 0 30%",
+
+    ".tocStyle": {
+      position: "sticky",
+      top: "48px",
+      paddingLeft: "24px",
+      borderLeft: "2px solid #646FD4",
+      margin: "32px 0 0 64px",
+
+      ".contentWrapper": {
+        lineHeight: "28px",
+
+        ".contentMain, .contentSub": {
+          display: "block",
+          color: "black",
+          textDecoration: "none",
+        },
+
+        ".contentMain": {
+          fontSize: "16px",
+          fontWeight: 600,
+        },
+        
+        ".contentSub": {
+          fontSize: "15px",
+          paddingLeft: "16px",
+        },
+
+        ".tocActive": {
+          color: "#646FD4"
+        }
+      }
+    }
+  });
+
+  const tocDatas = toc.map((content) => {
+    const contentDatas = content.split("*");
+    const data = {main: "", sub: []};
+    contentDatas.forEach((contentData, idx) => {
+      if (idx === 0) data.main = contentData.trim();
+      else data.sub.push(contentData.trim());
+    })
+    return data;
+  })
+
+  return (
+    <div className={TocWrapperStyle}>
+      <div className="tocStyle">
+        {tocDatas.map((toc, mainIdx) => (
+          <div className="contentWrapper" key={mainIdx}>
+            <a 
+              className={cx("contentMain", activeId === `${mainIdx + 1}` && "tocActive")}
+              href={`#${mainIdx + 1}`}
+              id={`#${mainIdx + 1}`}
+            >
+              {toc.main}
+            </a>
+            {toc.sub.map((sub, subIdx) => (
+              <a 
+                className={cx("contentSub", activeId === `${mainIdx + 1}.${subIdx + 1}` && "tocActive")}
+                href={`#${mainIdx + 1}.${subIdx + 1}`}
+                id={`#${mainIdx + 1}`}
+                key={subIdx}
+              >
+                {sub}
+              </a>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 };
