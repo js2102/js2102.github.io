@@ -13,7 +13,9 @@ const useIntersectionObservation = (setActiveId) => {
         (content) => content.isIntersecting
       );
 
-      setActiveId(visibleContent[0]?.target.id);
+      if (visibleContent.length !== 0) {
+        setActiveId(visibleContent[0]?.target.id);
+      }
     };
 
     //1. 새로운 observer 설정
