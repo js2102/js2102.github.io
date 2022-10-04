@@ -142,6 +142,7 @@ export const Body = ({ body }) => {
 
     "@media only screen and (max-width: 768px)": {
       width: "90%",
+      flexBasis: "100%",
     },
   });
 
@@ -188,7 +189,11 @@ export const Toc = ({ toc }) => {
         ".tocActive": {
           color: "#646FD4"
         }
-      }
+      },
+
+      "@media only screen and (max-width: 768px)": {
+        display: "none",
+      },
     }
   });
 
