@@ -14,7 +14,7 @@ const BlogPost = ({ data }) => {
           imageAlt={data.mdx.frontmatter.thumbnail_alt}
           title={data.mdx.frontmatter.title}
           keywords={data.mdx.frontmatter.keywords}
-          date={data.mdx.frontmatter.date}
+          date={data.mdx.frontmatter.initial_date}
         />
         <Content.BodyAndTocWrapper>
           <Content.Body body={data.mdx.body} />
@@ -30,7 +30,8 @@ export const query = graphql`
     mdx(id: { eq: $id }) {
       frontmatter {
         title
-        date
+        initial_date
+        modified_date
         keywords
         toc
         thumbnail_alt

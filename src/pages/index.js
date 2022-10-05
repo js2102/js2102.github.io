@@ -46,13 +46,14 @@ const IndexPage = ({ data }) => {
 
 export const query = graphql`
   query {
-    allMdx(sort: { fields: frontmatter___date, order: DESC }) {
+    allMdx(sort: { fields: frontmatter___initial_date, order: DESC }) {
       nodes {
         id
         slug
         frontmatter {
           title
-          date
+          initial_date
+          modified_date
           keywords
           summary
           deploy

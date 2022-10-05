@@ -143,6 +143,11 @@ export const Post = ({ posts }) => {
         fontSize: "14px",
         fontWeight: 400,
         opacity: 0.5,
+
+        ".initial-date": {
+          fontSize: "13px",
+          paddingLeft: "8px",
+        },
       },
 
       ".keyword-wrapper": {
@@ -199,7 +204,14 @@ export const Post = ({ posts }) => {
                   </div>
                   <div className="title">{post.frontmatter.title}</div>
                   <div className="summary">{post.frontmatter.summary}</div>
-                  <div className="date">{post.frontmatter.date}</div>
+                  <div className="date">
+                    <span className="modified-date">
+                      {post.frontmatter.modified_date}
+                    </span>
+                    <span className="initial-date">
+                      (최초: {post.frontmatter.initial_date})
+                    </span>
+                  </div>
                   {/* <div className="summary">{post.frontmatter.summary}</div> */}
                 </div>
               </Link>
