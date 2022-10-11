@@ -9,7 +9,10 @@ deploy: false
 keywords:
   - Javascript
 toc:
-  - 1. 개요
+  - 1. Intersection Observer란?
+    * 1.1 뷰포트(viewport)
+    * 1.2 그래서 Intersection Observer가 뭔데?
+    * 1.3 구현
 ---
 
 import { Image } from "../../../src/components/Common/Image";
@@ -23,3 +26,61 @@ import { TextHighlight } from "../../../src/components/Common/TextHighlight";
 <Blockquote>
   스크롤 관련 작업을 하다가 사수 분이 Intersection Observer 라는 것을 알려주셔서 정리해보기로 했다.
 </Blockquote>
+
+<h2 id="1">1. Intersection Observer란?</h2>
+- MDN에서 
+  <Link
+    link="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API"
+    target="_blank">
+    Intersection Observer
+  </Link>
+  를 다음과 같이 정의하고 있다.
+  <Blockquote>
+    The Intersection Observer API provides a way to asynchronously observe changes in the intersection of a target element with an ancestor element or with a top-level document's viewport.
+  </Blockquote>
+- 직역하자면 타켓 엘리먼트가 상위 엘리먼트 또는 최상위 document의 뷰포트와 교차된 변경사항을 비동기식으로 관찰하는 방법을 제공한다는 것이다.
+
+<br />
+<br />
+
+<h3 id="1.1">1.1 뷰포트(viewport)</h3>
+- MDN에서 
+  <Link
+    link="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API"
+    target="_blank">
+    viewport
+  </Link>
+  를 다음과 같이 설명한다.
+  <Blockquote>
+    A viewport represents the area in computer graphics being currently viewed. In web browser terms, it is generally the same as the browser window, excluding the UI, menu bar, etc. That is the part of the document you are viewing.
+  </Blockquote> 
+- 정리하자면 브라우저에서 주소창, 메뉴바 등을 제외한 사용자에게 보여지는 영역을 말한다.
+
+<br />
+
+### 1.2 그래서 Intersection Observer가 뭔데?
+- Intersection Observer는 브라우저에서의 뷰포트(Viewport)와 타켓 엘리먼트의 교차 지점을 관찰해 타겟 엘리먼트가 뷰포트에 속하는지 속하지 않는지를 구별하는 기능을 제공한다.
+- Intersection Observer는 <Highlight>new IntersectionObserver()</Highlight> 를 통해 인스턴스를 생성하고 observe 메서드를 통해 관찰할 element를 지정한다.
+
+```
+const io = new IntersectionObserver(callback, options);
+io.observe(element);
+```
+
+<br />
+
+### 1.3 구현
+
+<iframe src="https://codesandbox.io/embed/friendly-wiles-2mpv9r?fontsize=14&hidenavigation=1&theme=dark"
+  style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+  title="friendly-wiles-2mpv9r"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+<Source 
+  lists={[
+    ["MDN - Intersection Observer", "https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API"],
+    ["MDN - Viewport", "https://developer.mozilla.org/en-US/docs/Web/CSS/Viewport_concepts"]
+  ]} 
+/>
