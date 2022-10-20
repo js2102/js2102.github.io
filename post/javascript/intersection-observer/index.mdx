@@ -26,6 +26,7 @@ import { Blockquote } from "../../../src/components/Common/Blockquote";
 import { TextHighlight } from "../../../src/components/Common/TextHighlight";
 
 import intersectionObserver1 from "./image/intersection-observer-1.png";
+import intersectionObserver2 from "./image/intersection-observer-2.png";
 
 <Blockquote>
   스크롤 관련 작업을 하다가 사수 분이 Intersection Observer API 라는 것을 알려주셔서 정리해보기로 했다.
@@ -135,6 +136,10 @@ io.observe(element);
 
 - 그리고 콜백은 2개의 인수 <Highlight>entries</Highlight>와 <Highlight>observer</Highlight>를 가진다.
 
+<br />
+
+<h4>1.4.1 entries</h4>
+
 ```
 const io = new IntersectionObserver((entries, observer) => {
   entries.forEach(entry => {
@@ -153,17 +158,34 @@ io.observe(element);
 
 - IntersectionObserverEntry의 배열로 되어 있고 각 객체는 <Highlight>time</Highlight>, <Highlight>rootBounds</Highlight>, <Highlight>isVisible</Highlight> 등의 속성들을 포함한다.
 - 이 중에서 중요한 속성들은 다음과 같다.
-  - <Highlight color="#FFBC97">boundingClientRect</Highlight>: 관찰 대상의 사각형 정보
-  - <Highlight color="#FFBC97">intersectionRect</Highlight>: 관찰 대상의 교차한 영역 정보
-  - <Highlight color="#FFBC97">intersectionRatio</Highlight>: 관찰 대상의 교차한 영역 백분율
-  - <Highlight color="#FFBC97">isIntersecting</Highlight>: 관찰 대상의 교차 상태(Boolean)
-  - <Highlight color="#FFBC97">target</Highlight>: 관찰 대상 요소(Element)
+  - <Highlight color="#FFBC97">target</Highlight>: 관찰 대상(Element) 요소
+  - <Highlight color="#FFBC97">boundingClientRect</Highlight>: 교차한 지점과 상관없이 오로지 관찰 대상의 사각형 정보
+  - <Highlight color="#FFBC97">intersectionRect</Highlight>: 뷰포트와 교차하는 관찰 대상의 영역에 대한 사격형 정보
+  - <Highlight color="#FFBC97">intersectionRatio</Highlight>: 뷰포트와 교차하는 관찰 대상의 영역을 0.0 ~ 1.0 사이의 수치로 반환
+  - <Highlight color="#FFBC97">isIntersecting</Highlight>: 뷰포트와 관찰 대상의 교차 상태를 나타내는 값(Boolean)
 
+<br />
+
+<h4>1.4.2 observer</h4>
+
+```
+const io = new IntersectionObserver((entries, observer) => {
+ console.log(observer);
+}, options);
+
+io.observe(element);
+```
+
+- 이번에는 observer를 확인해보면 다음과 같다.
+
+  <Image src={intersectionObserver2} width="50%" />
+
+<br />
 <br />
 
 <h3 id="1.5">1.5 구현</h3>
 
-<iframe src="https://codesandbox.io/embed/intersection-observer-forked-ufpufc?fontsize=14&hidenavigation=1&theme=dark"
+<iframe src="https://codesandbox.io/embed/intersection-observer-forked-33gfwt?fontsize=14&hidenavigation=1&theme=dark"
   style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
   title="intersection_observer (forked)"
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
