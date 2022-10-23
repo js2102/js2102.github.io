@@ -2,10 +2,10 @@
 title: "유용한 Git 명령어 모음집"
 thumbnail: "./git.png"
 thumbnail_alt: "git"
-summary: "파도파도 끝이 없는 Git"
+summary: "Git 좀 잘하고 싶어서 작성한 글"
 initial_date: "2022-09-07"
 modified_date: "2022-10-03"
-deploy: false
+deploy: true
 keywords:
   - Git
 toc:
@@ -20,22 +20,21 @@ import { Baseline } from "../../../src/components/Common/Baseline";
 import { Highlight } from "../../../src/components/Common/Highlight";
 import { Blockquote } from "../../../src/components/Common/Blockquote";
 import { TextHighlight } from "../../../src/components/Common/TextHighlight";
+import { Title, Subtitle, ThirdTitle } from "../../../src/components/Common/Title";
 
 <Blockquote>
-  git을 사용하면서 알게된 유용한 Git 명령어들을 최대한 정리해보리고 했다.
+  git을 사용하면서 알게된 유용한 Git 명령어들을 최대한 정리해보려고 한다.
 </Blockquote>
 
-## 1. push
+<Title id="1" title="1. push" />
 
-### 1.1 HEAD보다 이전의 커밋까지만 push해야 하는 경우
+<Subtitle id="1.1" title="1.1 HEAD보다 이전의 커밋까지만 push해야 하는 경우" />
 
 ```
 git push <Remote명> <commit SHA:Branch명>
 ```
 
-<br />
-
-### 1.2 로컬에 있는 사항을 강제로 force push해야 하는 경우
+<Subtitle id="1.2" title="1.2 로컬에 있는 사항을 강제로 force push해야 하는 경우" />
 
 ```
 git push <Remote명> <Branch명> -f
@@ -55,7 +54,7 @@ git push <Remote명> <Branch명> --force-width-lease
 <br />
 <br />
 
-## 2. cherry-pick
+<Title id="2" title="2. cherry-pick" />
 
 ```
 git cherry-pick <commit SHA>
