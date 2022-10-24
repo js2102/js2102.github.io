@@ -14,8 +14,8 @@ toc:
     * 1.2 등장 배경
     * 1.3 그래서 Intersection Observer가 뭔데?
     * 1.4 Callback
-    * 1.5 Option
-    * 1.6 구현
+    * 1.5 구현
+    * 1.6 Option
 ---
 
 import { Image } from "../../../src/components/Common/Image";
@@ -173,7 +173,7 @@ io.observe(element);
 
 <Subtitle id="1.5" title="1.5 구현" />
 
-<iframe src="https://codesandbox.io/embed/intersection-observer-forked-j1zny9?fontsize=14&hidenavigation=1&theme=dark"
+<iframe src="https://codesandbox.io/embed/intersection-observer-forked-5993ee?fontsize=14&hidenavigation=1&theme=dark"
   style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
   title="intersection_observer (forked)"
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
@@ -197,8 +197,46 @@ io.observe(element);
 - 직역하자면 IntersectionObserver() 생성자에 전달되는 options 객체는 콜백이 호출되는 상황을 root, rootMargin, threshold로 조작할 수 있다는 것이다.
 
 <ThirdTitle title="1.6.1 root" />
+  <Blockquote>
+    The element that is used as the viewport for checking visibility of the target.
+    Must be the ancestor of the target. Defaults to the browser viewport if not specified or if null.
+  </Blockquote>
 
-- 타겟의 가시성을 검사하기 위해 뷰포트 대신 사용할 요소 객체(루트 요소)를 지정합니다.
+- 대상(Target) 요소의 가성성을 확인할 때 사용되는 뷰포트 요소를 지정하는 옵션으로 이는 대상 요소의 조상(부모) 요소여야 한다.
+- 기본 값은 뷰포트이고 root 값이 null이거나 지정되지 않으면 기본값으로 설정된다.
+
+  <iframe src="https://codesandbox.io/embed/intersection-observer-2-wd6rni?fontsize=14&hidenavigation=1&theme=dark"
+    style="width:90%; height:400px; border:0; border-radius: 4px;"
+    title="intersection_observer_2"
+    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+  ></iframe>
+
+<br />
+
+- 위 예에서는 각 대상 요쇼들(right)의 부모 요소(rightWrapper)를 root로 설정한 것이다.
+
+```
+const io = new IntersectionObserver(callback, {
+  root: document.getElementById("rightWrapper")
+});
+```
+
+<ThirdTitle title="1.6.2 rootMargin" />
+  <Blockquote>
+    Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).
+    The values can be percentages. This set of values serves to grow or shrink each side of the root element's bounding box before computing intersections. Defaults to all zeros.
+  </Blockquote>
+
+- CSS의 마진과 같이 root 각 측면의 bounding box를 수축히키거나 증가시킨다.
+- 기본값은 0이고 원하는 값을 px 또는 % 등으로 나타낼 수 있다. 이 때, 단위를 꼭 입력해야 한다.
+
+```
+const io = new IntersectionObserver(callback, {
+  root: document.getElementById("rightWrapper"),
+  rootMargin: "48px 0px 0px 0px"
+});
+```
 
 <br />
 <br />
