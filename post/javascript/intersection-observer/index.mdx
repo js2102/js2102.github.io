@@ -259,7 +259,7 @@ const io = new IntersectionObserver(callback, {
   Either a single number or an array of numbers which indicate at what percentage of the target's visibility the observer's callback should be executed.
 </Blockquote>
 
-- 옵저버가 실행되기 위해 대상 요소의 가시성 퍼센티지를 나타내는 단일 숫자 혹은 숫자 배열이다.
+- 옵저버가 실행되기 위한 대상 요소의 가시성 퍼센티지를 나타내는 단일 숫자 혹은 숫자 배열이다.
 
 <Blockquote>
   If you only want to detect when visibility passes the 50% mark, you can use a value of 0.5. 
@@ -275,15 +275,23 @@ const io = new IntersectionObserver(callback, {
 
 <Blockquote>
   The default is 0 (meaning as soon as even one pixel is visible, the callback will be run).
-</Blockquote>
-
-- 기본값은 0이다. (이는 요소가 1px이라도 보이면 콜백이 실행됨을 의미한다.)
-
-<Blockquote>
   A value of 1.0 means that the threshold isn't considered passed until every pixel is visible.
 </Blockquote>
 
-- 1.0은 요소의 모든 픽셀이 화면에 노출되기 전에는 콜백을 실행시키지 않음을 의미한다.
+- 기본값은 0이다.(이는 요소가 1px이라도 보이면 콜백이 실행됨을 의미한다.) 1.0은 요소의 모든 픽셀이 화면에 노출되기 전에는 콜백을 실행시키지 않음을 의미한다.
+
+<br />
+<br />
+
+<iframe src="https://codesandbox.io/embed/intersection-observer-3-lhmzts?fontsize=14&hidenavigation=1&theme=dark"
+  style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+  title="intersection_observer_3"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+- 위 예제는 해당 요소가 50%만큼 보여졌을 때 왼쪽 목차의 다음 요소를 활성화 시키는 예제이다.
+- 예를 들어, 1값에 해당하는 요소가 50%를 초과하면 2에 해당하는 목차 요소가 활성화 된다.
 
 <Source 
   lists={[
