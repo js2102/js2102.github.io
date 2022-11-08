@@ -4,7 +4,7 @@ thumbnail: "./git.png"
 thumbnail_alt: "git"
 summary: "Git 좀 잘하고 싶어서 작성한 글"
 initial_date: "2022-09-07"
-modified_date: "2022-10-03"
+modified_date: "2022-11-08"
 deploy: true
 keywords:
   - Git
@@ -62,6 +62,16 @@ git push origin master:feature/event
 
 <Title id="2" title="2. cherry-pick" />
 
+- 다른 브랜치에 있는 커밋을 현재 브랜치로 원하는 커밋을 가져 올 때 사용하면 된다.
+
 ```
 git cherry-pick <commit SHA>
 ```
+
+- 만약 여러 커밋을 한번에 가져오고 싶다면 다음과 같은 명령어를 사용하면 된다.
+
+```
+git cherry-pick <commit SHA> <commit SHA> <commit SHA> ...
+```
+
+- 단, cherry-pick 명령어를 사용하게 되면 원래 커밋의 해쉬값과 다르므로 주의해야 한다.
