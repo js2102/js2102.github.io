@@ -11,6 +11,7 @@ keywords:
 toc:
   - 1. push
   - 2. cherry-pick
+  - 3. rebase
 ---
 
 import { Image } from "../../../src/components/Common/Image";
@@ -21,6 +22,9 @@ import { Highlight } from "../../../src/components/Common/Highlight";
 import { Blockquote } from "../../../src/components/Common/Blockquote";
 import { TextHighlight } from "../../../src/components/Common/TextHighlight";
 import { Title, Subtitle, ThirdTitle } from "../../../src/components/Common/Title";
+
+import gitCommandSummary1 from "./image/git-command-summary-1.png";
+import gitCommandSummary2 from "./image/git-command-summary-2.png";
 
 <Blockquote>
   git을 사용하면서 알게된 유용한 Git 명령어들을 최대한 정리해보려고 한다.
@@ -86,3 +90,11 @@ git rebase -i <타켓 commit의 이전 commit SHA>
 <Subtitle id="3.1" title="3.1 예전 커밋을 수정해야 하는 경우" />
 
 - 2개 이상의 예전 커밋을 수정해야 할 때 rebase 명령어를 실행하면 다음과 같은 커맨드 창이 뜬다.
+
+<Image src={gitCommandSummary1} />
+
+- 커맨드 창에 들어오면 i를 입력해 입력 모드로 전환하고 
+
+<Image src={gitCommandSummary2} />
+
+- 수정하고자 하는 commit을 pick 에서 edit으로 바꿔준다.
