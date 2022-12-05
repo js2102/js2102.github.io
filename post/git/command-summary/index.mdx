@@ -11,8 +11,7 @@ keywords:
 toc:
   - 1. push
   - 2. cherry-pick
-  - 3. rebase
-  - 4. merge-request
+  - 3. merge-request
 ---
 
 import { Image } from "../../../src/components/Common/Image";
@@ -25,7 +24,6 @@ import { TextHighlight } from "../../../src/components/Common/TextHighlight";
 import { Title, Subtitle, ThirdTitle } from "../../../src/components/Common/Title";
 
 import gitCommandSummary1 from "./image/git-command-summary-1.png";
-import gitCommandSummary2 from "./image/git-command-summary-2.png";
 
 <Blockquote>
   git을 사용하면서 알게된 유용한 Git 명령어들을 최대한 정리해보려고 한다.
@@ -81,24 +79,15 @@ git cherry-pick <commit SHA> <commit SHA> <commit SHA> ...
 
 - 단, cherry-pick 명령어를 사용하게 되면 원래 커밋의 해쉬값과 다르므로 주의해야 한다.
 
+<Title id="3" title="3. merge-request" />
 
-<Title id="3" title="3. rebase" />
+- 팀원들과 같이 개발할 때 merge-request를 확인할 일이 생긴다.
+- 간단한 merge-request인 경우 github나 gitlab 등에서 변경사항을 보고 리뷰를 한다.
+- 하지만, 리뷰 사항이 복잡하거나 제대로 동작하는지를 확인하고 싶을때가 있다.
+- 이 때, 이 merge-request를 개발 서버에 적용하고 싶을 때 다음 문장을 <Highlight>.git/config</Highlight> 파일 안에 넣어주면 된다.
 
 ```
-git rebase -i <타켓 commit의 이전 commit SHA>
+fetch = +refs/merge-requests/*/head:refs/remotes/upstream/merge-requests/*
 ```
 
-<Subtitle id="3.1" title="3.1 예전 커밋을 수정해야 하는 경우" />
-
-- 2개 이상의 예전 커밋을 수정해야 할 때 rebase 명령어를 실행하면 다음과 같은 커맨드 창이 뜬다.
-
-<Image src={gitCommandSummary1} />
-
-- 커맨드 창에 들어오면 i를 입력해 입력 모드로 전환하고 
-
-<Image src={gitCommandSummary2} />
-
-- 수정하고자 하는 commit을 pick 에서 edit으로 바꿔준다.
-
-
-<Title id="4" title="4. merge-request" />
+<Image src={gitCommandSummary1} width="600px" />
