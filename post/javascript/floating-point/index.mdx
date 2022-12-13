@@ -14,6 +14,7 @@ toc:
     * 2.1 들어가기 전
     * 2.2 그래서 원인이 뭔데?
   - 3. 해결방법
+    * 3.1 toFixed()
 ---
 
 import { Image } from "../../../src/components/Common/Image";
@@ -52,3 +53,11 @@ import floatingPoint2 from "./image/floating-point-2.png";
 - 이 때문에 미세한 오차가 발생한다.
 
 <Subtitle id="2.1" title="2.2 그래서 원인이 뭔데?" />
+
+- 정확히 따지자면 자바스크립트에서 숫자 타입은 내부적으로 64비트 형식인 IEEE-754으로 표현되기 때문에 숫자를 저장하려면 64비트가 필요하다.
+- 이 때, 64비트는 중 52비트는 숫자를, 11비트는 소수점 위치를, 나머지 1비트는 부호를 저장하는데 사용된다.
+- 그런데 너무 큰 수는 표현하는데 64비트를 초과하기 때문에 Infinity 타입으로 처리 된다.
+
+<Title id="3" title="3. 해결방법" />
+
+<Subtitle id="3.1" title="3.1 toFixed()" />
