@@ -15,6 +15,7 @@ toc:
     * 2.2 그래서 원인이 뭔데?
   - 3. 해결방법
     * 3.1 toFixed()
+    * 3.2 Math.round()
 ---
 
 import { Image } from "../../../src/components/Common/Image";
@@ -28,6 +29,8 @@ import { Title, Subtitle, ThirdTitle } from "../../../src/components/Common/Titl
 
 import floatingPoint1 from "./image/floating-point-1.png";
 import floatingPoint2 from "./image/floating-point-2.png";
+import floatingPoint3 from "./image/floating-point-3.png";
+import floatingPoint4 from "./image/floating-point-4.png";
 
 <Blockquote>
   개발을 하다가 소수점 관련한 에러를 발견해서 글을 써보려고 한다.
@@ -45,16 +48,16 @@ import floatingPoint2 from "./image/floating-point-2.png";
 
 <Title id="2" title="2. 원인" />
 
-<Subtitle id="2.1" title="2.1 들어가기 전" />
+<Subtitle id="2.1" title="2.1 원인이 뭘까" />
 
 - 컴퓨터는 0과 1로만 이루어져 있어서 10진법으로 계산하는 우리와 달리 2진법을 통해 계산한다.
 - 몇몇 소수의 경우 10진법을 2진법을 변환할 때 무한소수가 되어버린다.
 - 이 때, 한정적인 컴퓨터의 자원을 활용하는 프로그램은 저장공간의 한계로 인해 무한 소수를 반올림하여 유한 소수로 바꾸게 된다.
 - 이 때문에 미세한 오차가 발생한다.
 
-<Subtitle id="2.1" title="2.2 그래서 원인이 뭔데?" />
+<Subtitle id="2.2" title="2.2 또 다른 예" />
 
-- 정확히 따지자면 자바스크립트에서 숫자 타입은 내부적으로 64비트 형식인 IEEE-754으로 표현되기 때문에 숫자를 저장하려면 64비트가 필요하다.
+- 자바스크립트에서 숫자 타입은 내부적으로 64비트 형식인 IEEE-754으로 표현되기 때문에 숫자를 저장하려면 64비트가 필요하다.
 - 이 때, 64비트는 중 52비트는 숫자를, 11비트는 소수점 위치를, 나머지 1비트는 부호를 저장하는데 사용된다.
 - 그런데 너무 큰 수는 표현하는데 64비트를 초과하기 때문에 Infinity 타입으로 처리 된다.
 
@@ -62,9 +65,29 @@ import floatingPoint2 from "./image/floating-point-2.png";
 
 <Subtitle id="3.1" title="3.1 toFixed()" />
 
-- <Link link="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed" target="_blank">toFixed()</Link> 메서드는 Number 객체를 주어진 매개변수 digits 만큼의 소수점 이하 자리수를 정확하게 갖는 문자열 표현으로 반환한다.
+- <Link link="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed" target="_blank">toFixed()</Link> 메서드는 Number 객체를 주어진 매개변수 digits 만큼의 소수점 이하 자리수를 반환한다.
 - 이 때, 매개변수 digits은 구현체에 따라 다르지만 보통 0 ~ 20 이하의 값을 사용할 수 있다.
 
 ```
 numObj.toFixed([digits])
 ```
+  <Image src={floatingPoint3} width="300px" />
+
+- 이 때, 주의해야 할점은 반환값은 문자열이다.
+
+<Subtitle id="3.2" title="3.2 Math.round()" />
+
+- <Link link="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Math/round" target="_blank">Math.round()</Link> 함수는 입력값을 반올림한 수 와 가장 가까운 정수 값을 반환한다.
+
+```
+Math.round(digit)
+```
+
+<Image src={floatingPoint4} width="300px" />
+
+<Source 
+  lists={[
+    ["MDN - toFixed()", "https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed"],
+    ["MDN - Math.round()", "https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Math/round"]
+  ]} 
+/>
