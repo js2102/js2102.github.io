@@ -4,14 +4,14 @@ thumbnail: "./git.png"
 thumbnail_alt: "git"
 summary: "Git 좀 잘하고 싶어서 작성한 글"
 initial_date: "2022-09-07"
-modified_date: "2022-11-08"
+modified_date: "2022-12-23"
 deploy: true
 keywords:
   - Git
 toc:
   - 1. push
   - 2. cherry-pick
-  - 3. merge-request
+  - 3. blame
 ---
 
 import { Image } from "../../../src/components/Common/Image";
@@ -79,17 +79,18 @@ git cherry-pick <commit SHA> <commit SHA> <commit SHA> ...
 
 - 단, cherry-pick 명령어를 사용하게 되면 원래 커밋의 해쉬값과 다르므로 주의해야 한다.
 
-<Title id="3" title="3. merge-request" />
+<Title id="3" title="3. blame" />
 
-- 팀원들과 같이 개발할 때 merge-request를 확인할 일이 생긴다.
-- 간단한 merge-request인 경우 github나 gitlab 등에서 변경사항을 보고 리뷰를 한다.
-- 하지만, 리뷰 사항이 복잡하거나 제대로 동작하는지를 확인하고 싶을때가 있다.
-- 이 때, 이 merge-request를 개발 서버에 적용하고 싶을 때 다음 문장을 <Highlight>.git/config</Highlight> 파일 안에 넣어주면 된다.
+- 해당 파일의 코드를 라인별로 커밋 해쉬값, 파일 경로, 수정한 사람, 수정 날짜 및 시간 등을 확인할 수 있다.
 
 ```
-fetch = +refs/merge-requests/*/head:refs/remotes/upstream/merge-requests/*
+git blame <파일 경로>
 ```
 
-- git이 존재하는 폴더에서 <Highlight>vim .git/config</Highlight> 명령어를 입력한 뒤 merge-request가 존재하는 레포지토리에 추가한다.
+<Image src={gitCommandSummary1} />
 
-  <Image src={gitCommandSummary1} width="600px" />
+<Source 
+  lists={[
+    ["git - book", "https://git-scm.com/book/ko/v2"]
+  ]} 
+/>
