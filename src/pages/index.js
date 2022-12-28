@@ -7,6 +7,8 @@ import { Introduction } from "../components/Home/Introduction";
 import * as PostList from "../components/Home/PostList";
 
 const IndexPage = ({ data }) => {
+  const PAGE_PER_POST = 4;
+
   const keywordCount = data.allMdx.pageInfo.totalCount;
   const allMdxNodes = data.allMdx.nodes;
   const keywordRawData = allMdxNodes
@@ -21,12 +23,18 @@ const IndexPage = ({ data }) => {
 
   const [selectKeyword, setSelectKeyword] = useState("All");
 
-  const posts =
+  let page = 0;
+  const filteredPosts =
     !selectKeyword || selectKeyword === "All"
       ? allMdxNodes
       : allMdxNodes.filter((mdx) =>
           mdx.frontmatter.keywords.includes(selectKeyword)
         );
+
+  const pagingPost = filteredPosts.slice(
+    page * PAGE_PER_POST,
+    PAGE_PER_POST + page * PAGE_PER_POST
+  );
 
   return (
     <Layout pageTitle="Home">
@@ -38,7 +46,7 @@ const IndexPage = ({ data }) => {
           selectKeyword={selectKeyword}
           setSelectKeyword={setSelectKeyword}
         />
-        <PostList.Post posts={posts} />
+        <PostList.Post posts={pagingPost} />
       </PostList.Wrapper>
     </Layout>
   );
