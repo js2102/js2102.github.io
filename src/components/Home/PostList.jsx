@@ -221,3 +221,25 @@ export const Post = ({ posts }) => {
     </div>
   );
 };
+
+export const MoreButton = ({ onClick }) => {
+  const moreButtonWrapperStyle = css({
+    display: "flex",
+    justifyContent: "center",
+
+    button: {
+      fontSize: "18px",
+      color: "#FFFFFF",
+      backgroundColor: "#646FD4",
+      border: "1px solid #646FD4",
+      borderRadius: "8px",
+      padding: "7px 16px",
+    },
+  });
+
+  return (
+    <div className={moreButtonWrapperStyle}>
+      <button onClick={onClick}>더 보기</button>
+    </div>
+  );
+};

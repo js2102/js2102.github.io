@@ -1,6 +1,5 @@
 import { graphql } from "gatsby";
 import React, { useState } from "react";
-import queryString from "query-string";
 
 import { Layout } from "../components/Base/Layout";
 import { Introduction } from "../components/Home/Introduction";
@@ -23,7 +22,6 @@ const IndexPage = ({ data }) => {
 
   const [selectKeyword, setSelectKeyword] = useState("All");
 
-  let page = 0;
   const filteredPosts =
     !selectKeyword || selectKeyword === "All"
       ? allMdxNodes
@@ -31,9 +29,10 @@ const IndexPage = ({ data }) => {
           mdx.frontmatter.keywords.includes(selectKeyword)
         );
 
-  const pagingPost = filteredPosts.slice(
-    page * PAGE_PER_POST,
-    PAGE_PER_POST + page * PAGE_PER_POST
+  const [showMoreCount, setShowMoreCount] = useState(0);
+  const visibleResult = filteredPosts.slice(
+    0,
+    PAGE_PER_POST * (showMoreCount + 1)
   );
 
   return (
@@ -46,7 +45,12 @@ const IndexPage = ({ data }) => {
           selectKeyword={selectKeyword}
           setSelectKeyword={setSelectKeyword}
         />
-        <PostList.Post posts={pagingPost} />
+        <PostList.Post posts={visibleResult} />
+        {filteredPosts.length > (showMoreCount + 1) * PAGE_PER_POST && (
+          <PostList.MoreButton
+            onClick={() => setShowMoreCount(showMoreCount + 1)}
+          />
+        )}
       </PostList.Wrapper>
     </Layout>
   );
