@@ -4,7 +4,7 @@ import { css, cx } from "@emotion/css";
 import { GatsbyImage } from "gatsby-plugin-image";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 
-import useIntersectionObservation from "../../hooks/useIntersectionObservation";
+import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 
 export const Wrapper = ({ children }) => {
   const postWrapperStyle = css({
@@ -155,7 +155,7 @@ export const Body = ({ body }) => {
 
 export const Toc = ({ toc }) => {
   const [activeId, setActiveId] = useState("content1");
-  useIntersectionObservation(setActiveId);
+  useIntersectionObserver(setActiveId);
 
   const TocWrapperStyle = css({
     flex: "0 0 30%",

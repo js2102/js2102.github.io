@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const useIntersectionObservation = (setActiveId) => {
+const useIntersectionObserver = (setActiveId) => {
   const contentRef = useRef({});
 
   useEffect(() => {
@@ -30,4 +30,4 @@ const useIntersectionObservation = (setActiveId) => {
   }, [setActiveId]);
 };
 
-export default useIntersectionObservation;
+export default useIntersectionObserver;
