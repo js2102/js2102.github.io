@@ -1,20 +1,29 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
-const useResizeObserver = () => {
-  let isMobile = false;
-  const resizeObserver = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      const width = entry.contentRect.width;
-      if (width <= 768) {
-        isMobile = true;
-      } else {
-        isMobile = false;
+const useResizeObserver = (initialState = false) => {
+  const [isMobile, setIsMobile] = useState(initialState);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const width = entry.contentRect.width;
+        if (width <= 768) {
+          setIsMobile(true);
+        } else {
+          setIsMobile(false);
+        }
       }
-    }
+    });
+
+    const global = document.getElementById("globalWrapper");
+    resizeObserver.observe(global);
+
+    return () => {
+      resizeObserver.unobserve(global);
+    };
   });
 
-  const global = document.getElementById("globalWrapper");
-  resizeObserver.observe(global);
+  return [isMobile];
 };
 
 export default useResizeObserver;

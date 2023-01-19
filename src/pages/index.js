@@ -5,8 +5,12 @@ import { Layout } from "../components/Base/Layout";
 import { Introduction } from "../components/Home/Introduction";
 import * as PostList from "../components/Home/PostList";
 
+import useResizeObserver from "../hooks/useResizeObserver";
+
 const IndexPage = ({ data }) => {
   const PAGE_PER_POST = 4;
+
+  const [isMobile] = useResizeObserver(false);
 
   const keywordCount = data.allMdx.pageInfo.totalCount;
   const allMdxNodes = data.allMdx.nodes;
@@ -46,11 +50,13 @@ const IndexPage = ({ data }) => {
           setSelectKeyword={setSelectKeyword}
         />
         <PostList.Post posts={visibleResult} />
-        {filteredPosts.length > (showMoreCount + 1) * PAGE_PER_POST && (
-          <PostList.MoreButton
-            onClick={() => setShowMoreCount(showMoreCount + 1)}
-          />
-        )}
+        {isMobile
+          ? null
+          : filteredPosts.length > (showMoreCount + 1) * PAGE_PER_POST && (
+              <PostList.MoreButton
+                onClick={() => setShowMoreCount(showMoreCount + 1)}
+              />
+            )}
       </PostList.Wrapper>
     </Layout>
   );

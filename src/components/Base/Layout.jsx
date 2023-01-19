@@ -6,8 +6,6 @@ import { Meta } from "./Meta";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 
-import useResizeObserver from "../../hooks/useResizeObserver";
-
 export const Layout = ({ pageTitle, children }) => {
   const globalCSS = css({
     fontFamily:
@@ -23,10 +21,6 @@ export const Layout = ({ pageTitle, children }) => {
       }
     }
   `);
-
-  useEffect(() => {
-    useResizeObserver();
-  }, []);
 
   return (
     <div className={globalCSS} id="globalWrapper">
