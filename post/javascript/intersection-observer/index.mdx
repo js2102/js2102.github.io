@@ -16,6 +16,7 @@ toc:
     * 1.4 Callback
     * 1.5 구현
     * 1.6 Option
+  - 2. [번외] ResizeObserver
 ---
 
 import { Image } from "../../../src/components/Common/Image";
@@ -293,9 +294,14 @@ const io = new IntersectionObserver(callback, {
 - 위 예제는 해당 요소가 50%만큼 보여졌을 때 왼쪽 목차의 다음 요소를 활성화 시키는 예제이다.
 - 예를 들어, 1값에 해당하는 요소가 50%를 초과하면 2에 해당하는 목차 요소가 활성화 된다.
 
-<Source 
+<Title id="2" title="2. [번외] ResizeObserver" />
+
+- Intersection Observer와 비슷하게 <Link link="https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API" target="_blank">Resize Observer</Link>라는 API도 존재한다.
+
+<Source
   lists={[
     ["MDN - Intersection Observer", "https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API"],
-    ["MDN - Viewport", "https://developer.mozilla.org/en-US/docs/Web/CSS/Viewport_concepts"]
+    ["MDN - Viewport", "https://developer.mozilla.org/en-US/docs/Web/CSS/Viewport_concepts"],
+    ["MDN - ResizeObserver", "https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API"]
   ]} 
 />
