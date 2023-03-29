@@ -9,14 +9,9 @@ deploy: true
 keywords:
   - Javascript
 toc:
-  - 1. SHA가 뭘까?
-  - 2. Hash가 뭘까?
-    * 2.1 Hash
-    * 2.2 해싱 알고리즘 특징
-    * 2.3 해싱 알고리즘 단점
-    * 2.4 해싱 알고리즘 단점 보안
-    * 2.5 솔트(salt)
-  - 3. SHA 종류
+  - 1. SHA
+  - 2. 해시
+  - 3. 해시 함수 특징
   - 4. SHA-256
   - 5. 구현
 ---
@@ -31,12 +26,13 @@ import { TextHighlight } from "../../../../src/components/Common/TextHighlight";
 import { Title, Subtitle, ThirdTitle } from "../../../../src/components/Common/Title";
 
 import sha2561 from "./image/sha256-1.png";
+import sha2562 from "./image/sha256-2.png";
 
 <Blockquote>
   JS 내장 객체인 crypto 모듈을 사용해 SHA-256으로 비밀번호 암호화하는 과정을 글로 정리해보려고 한다.
 </Blockquote>
 
-<Title id="1" title="1. SHA가 뭘까?" />
+<Title id="1" title="1. SHA" />
 
 - 사람은 누구나 지문을 가지고 있고 각자의 지문은 서로 다르다. 같은 지문을 가질 사람의 확률은 약 6천만분의 1이라고 한다.
 - 디지털 문서에도 사람과 같은 지문이 존재하는데 그 지문들 중 하나가 SHA-256 해시값이다.
@@ -47,14 +43,29 @@ import sha2561 from "./image/sha256-1.png";
 
 - 그렇다면 해시(Hash)는 뭘까?
 
-<Title id="2" title="2. 해시(Hash)가 뭘까?" />
+<Title id="2" title="2. 해시" />
 
-<Subtitle id="2.1" title="2.1 해시(Hash)" />
+- 해시 함수 또는 해시 알고리즘을 이용해 원본 데이터를  고정된 길이를 가진 데이터로 매핑하는 과정을 말한다.
 
-- 어떤 알고리즘에 의해 원본 데이터를 매핑시켜 완전히 다른 암호화된 데이터로 변환시키는 것을 의미한다. 
-  (그림 참고 https://st-lab.tistory.com/100)
-- 이 변환을 해시라고 하고, 해시에 의해 암호화된 데이터를 다이제스트(digest)라고 한다.
-- 예를 들어) 비밀번호 123456을 SHA-256을 통해 해시 값을 생성하면 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 라는 해시값이 생성된다.
+  <Image src={sha2562} width="50%" />
+
+- 예를 들어) 비밀번호 123456을 SHA-256을 통해 해시 값을 생성하면 8d969eef6ecad3c29a3a629280e686cf0c3f5d
+5a86aff3ca12020c923adc6c92 라는 해시값이 생성된다.
+- 이 때 해시에 의해 암호화된 데이터를 다이제스트(digest)라고도 한다.
+
+<Title id="3" title="3. 해시 함수 특징" />
+
+- 단방향(One-Way)
+  - 다이제스트(digest)를 복호화 할 수 없다. 즉, 원본 데이터를 다시 구할 수 없다. 
+- 결정적(Deterministic)
+  - 동일한 문자열을 동일한 해시 알고리즘에 적용하면 동일한 결과값(다이제스트)을 얻는다. => 해시 함수의 한계점
+- 빠른 연산(Fast Computation)
+  - 해당 값의 색인만 알면 해시 테이블의 크기에 상관없이 데이터를 빠르게 접근할 수 있다. => 해시 함수의 장단점
+- 쇄도 효과(The Avalanche Effect)
+  - 산사태 효과라고도 불리며, 원본 데이터 값에 미세한 변화를 줄 경우 결과값에 상당한 변화가 일어난다.
+- 충돌 저항성(Must withstand collisions)
+  - 충돌이 잘 일어나지 않는다.
+  - 충돌이란 두 개 이상의 해시 함수의 결과값(다이제스트)이 동일한 경우를 말한다.
   
 
 <Subtitle id="2.2" title="2.2 해싱 알고리즘 특징" />
