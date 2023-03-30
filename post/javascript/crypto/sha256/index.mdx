@@ -25,8 +25,11 @@ import { Blockquote } from "../../../../src/components/Common/Blockquote";
 import { TextHighlight } from "../../../../src/components/Common/TextHighlight";
 import { Title, Subtitle, ThirdTitle } from "../../../../src/components/Common/Title";
 
-import sha2561 from "./image/sha256-1.png";
-import sha2562 from "./image/sha256-2.png";
+import sha256Img1 from "./image/sha256-1.png";
+import sha256Img2 from "./image/sha256-2.png";
+import sha256Img3 from "./image/sha256-3.png";
+import sha256Img4 from "./image/sha256-4.png";
+import sha256Img5 from "./image/sha256-5.png";
 
 <Blockquote>
   JS 내장 객체인 crypto 모듈을 사용해 SHA-256으로 비밀번호 암호화하는 과정을 글로 정리해보려고 한다.
@@ -39,7 +42,7 @@ import sha2562 from "./image/sha256-2.png";
 
 - SHA는 Secure Hash Algorithm의 약자로 직역하면 안전한 해시 알고리즘이다.
 
-  <Image src={sha2561} width="50%" />
+  <Image src={sha256Img1} width="50%" />
 
 - 그렇다면 해시(Hash)는 뭘까?
 
@@ -47,7 +50,7 @@ import sha2562 from "./image/sha256-2.png";
 
 - 해시 함수 또는 해시 알고리즘을 이용해 원본 데이터를  고정된 길이를 가진 데이터로 매핑하는 과정을 말한다.
 
-  <Image src={sha2562} width="50%" />
+  <Image src={sha256Img2} width="50%" />
 
 - 예를 들어) 비밀번호 123456을 SHA-256을 통해 해시 값을 생성하면 8d969eef6ecad3c29a3a629280e686cf0c3f5d
 5a86aff3ca12020c923adc6c92 라는 해시값이 생성된다.
@@ -57,15 +60,19 @@ import sha2562 from "./image/sha256-2.png";
 
 - 단방향(One-Way)
   - 다이제스트(digest)를 복호화 할 수 없다. 즉, 원본 데이터를 다시 구할 수 없다. 
+      <Image src={sha256Img3} width="50%" />
 - 결정적(Deterministic)
   - 동일한 문자열을 동일한 해시 알고리즘에 적용하면 동일한 결과값(다이제스트)을 얻는다. => 해시 함수의 한계점
 - 빠른 연산(Fast Computation)
   - 해당 값의 색인만 알면 해시 테이블의 크기에 상관없이 데이터를 빠르게 접근할 수 있다. => 해시 함수의 장단점
 - 쇄도 효과(The Avalanche Effect)
   - 산사태 효과라고도 불리며, 원본 데이터 값에 미세한 변화를 줄 경우 결과값에 상당한 변화가 일어난다.
+    <Image src={sha256Img4} width="50%" />
 - 충돌 저항성(Must withstand collisions)
-  - 충돌이 잘 일어나지 않는다.
-  - 충돌이란 두 개 이상의 해시 함수의 결과값(다이제스트)이 동일한 경우를 말한다.
+  - "충돌이 잘 일어나지 않는다."는 특징으로 충돌이란 두 개 이상의 해시 함수의 결과값(다이제스트)이 동일한 경우를 말한다.
+  - 이는 "비둘기집 원리"로도 설명 가능하다. 
+  - 비둘기집 원리란, n+1개의 물건을 n개의 상자에 넣을 때 적어도 어느 한 상자에는 두 개 이상의 물건이 들어 있다는 원리이다.
+    <Image src={sha256Img5} width="50%" />
   
 
 <Subtitle id="2.2" title="2.2 해싱 알고리즘 특징" />
